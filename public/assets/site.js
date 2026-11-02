@@ -1,0 +1,5 @@
+document.querySelector('.menu-toggle')?.addEventListener('click',function(){const open=this.getAttribute('aria-expanded')!=='true';this.setAttribute('aria-expanded',String(open));document.querySelector('#navigation').classList.toggle('open',open)});
+document.querySelectorAll('#navigation a').forEach(a=>a.addEventListener('click',()=>{document.querySelector('#navigation').classList.remove('open');document.querySelector('.menu-toggle').setAttribute('aria-expanded','false')}));
+document.querySelectorAll('[data-gallery]').forEach(b=>b.addEventListener('click',()=>{document.querySelector('#main-product-image').src=b.dataset.gallery;document.querySelectorAll('[data-gallery]').forEach(x=>x.classList.remove('selected'));b.classList.add('selected')}));
+const feedback=document.querySelector('.contact-form .alert');if(feedback){feedback.scrollIntoView({block:'center'});feedback.focus();}
+document.querySelectorAll('form[data-confirm]').forEach(f=>f.addEventListener('submit',e=>{if(!confirm(f.dataset.confirm))e.preventDefault()}));

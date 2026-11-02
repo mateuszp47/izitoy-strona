@@ -1,0 +1,2 @@
+@extends('admin.layout')
+@section('content')<div class="admin-login"><div class="eyebrow">TYLKO DLA ADMINISTRATORA</div><h1>Zaloguj się do panelu.</h1><form class="admin-form admin-card" method="post" action="/admin/login">@csrf<label>E-mail<input name="email" type="email" required autocomplete="username" value="{{ old('email') }}"></label><label>Hasło<input name="password" type="password" required autocomplete="current-password"></label><button class="button dark">Zaloguj</button></form></div>@endsection
