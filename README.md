@@ -1,6 +1,6 @@
 # IZITOY — toalety przenośne
 
-Strona sprzedażowa izitoy.pl: Laravel 13, Blade, SQLite, własny responsywny CSS/JS. Dwa warianty kabiny: niebieski i szary. Sprzedaż przez zapytanie; bez koszyka, płatności internetowych i automatycznego zawierania umowy.
+Strona sprzedażowa izitoy.pl: Laravel 13, Blade, SQLite, własny responsywny CSS/JS. Dwa początkowe warianty kabiny: niebieski i szary. Panel pozwala dodawać kolejne modele w tych kolorach. Sprzedaż przez zapytanie; bez koszyka, płatności internetowych i automatycznego zawierania umowy.
 
 ## Uruchomienie lokalne
 
@@ -20,8 +20,9 @@ Jeśli masz już lokalną kopię: `git pull origin main`, następnie `composer i
 
 ## Panel /admin
 
-- Edycja nazwy, ceny brutto i opisu dwóch wariantów.
-- Ukrywanie/publikowanie produktu; kolory pozostają stałe.
+- Dodawanie produktów: nazwa, kolor, cena brutto, opis, zdjęcie główne, galeria, własne parametry i wyposażenie. Wiele produktów może mieć ten sam kolor.
+- Edycja istniejących produktów.
+- Ukrywanie/publikowanie produktu; do wyboru pozostają kolory niebieski i szary.
 - Zdjęcie główne oraz galeria do 8 zdjęć. JPG, PNG i WebP, do 8 MB na plik. Zdjęcia z panelu zapisują się w `storage/app/public/products`.
 - Zapytania: dane klienta, wariant, liczba sztuk, miejscowość, treść i data potwierdzenia informacji o prywatności.
 - Statusy: nowe, w obsłudze, zamknięte. Możliwość trwałego usunięcia danych zapytania.
@@ -82,3 +83,10 @@ Testy obejmują publiczne strony, dane strukturalne, formularz i walidację, awa
 Ceny początkowe: 3500 zł brutto/szt. dla obu kolorów, według wskazanych ogłoszeń OLX z 2.11.2026. Opisy przepisane profesjonalnie na podstawie specyfikacji sprzedawcy. Pominięto nieudokumentowane porównania z ABS i twierdzenia o udziale w rynku.
 
 Zdjęcie główne i widoki katalogowe przygotowane narzędziem imagegen z fotografii z ogłoszeń (ujednolicone tło, światło i ostrość). Dodatkowe fotografie z ogłoszeń zachowują rzeczywiste detale; pliki zoptymalizowano do WebP. Przed publikacją należy porównać retusz z faktycznym dostarczanym produktem. Źródła i opis obróbki: `docs/assets.md`.
+
+## Aktualizacja z 3 listopada 2026
+
+Po pobraniu zmian uruchom `php artisan migrate` oraz `php artisan optimize:clear`.
+Migracje znoszą unikalność koloru, dodają parametry produktu i podmieniają wyłącznie fabryczne odwołania do zdjęć szarej kabiny. Zdjęcia przesłane przez administratora pozostają bez zmian. Link do panelu został usunięty z publicznej stopki; panel nadal jest dostępny pod /admin.
+
+Polityka prywatności została rozbudowana dla formularza i panelu. Dane identyfikacyjne administratora pobiera z ustawień firmy. Przed publicznym startem właściciel musi potwierdzić nazwę, adres i kontakt oraz zasady hostingu/poczty, retencję logów i kopii oraz ewentualne transfery poza EOG. Tych informacji nie można ustalić z samego kodu.

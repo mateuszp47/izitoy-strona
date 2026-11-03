@@ -3,6 +3,8 @@ namespace App\Http\Controllers;
 use App\Models\{Product,Inquiry,Setting};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\{Auth,Storage};
+use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 class AdminController {
  public function login(Request $r) {
   $data=$r->validate(['email'=>'required|email','password'=>'required|string']);
@@ -11,10 +13,38 @@ class AdminController {
  }
  public function logout(Request $r) {Auth::logout();$r->session()->invalidate();$r->session()->regenerateToken();return redirect('/admin/login');}
  public function index() {return view('admin.dashboard',['products'=>Product::all(),'inquiries'=>Inquiry::with('product')->latest()->paginate(20),'newCount'=>Inquiry::where('status','new')->count()]);}
+ public function create() {return view('admin.product',['product'=>new Product(['active'=>true,'color'=>'szary','specifications'=>[]])]);}
+ public function store(Request $r) {
+  $data=$this->productData($r);
+  $slug=Str::slug($data['name']) ?: 'toaleta';
+  if($slug==='nowy') $slug='produkt-nowy';
+  $candidate=$slug;$suffix=2;
+  while(Product::where('slug',$candidate)->exists()) $candidate=$slug.'-'.$suffix++;
+  $data['slug']=$candidate;
+  $data['image']=$r->file('image')->store('products','public');
+  $data['gallery']=[];
+  foreach($r->file('gallery',[]) as $file)$data['gallery'][]=$file->store('products','public');
+  $product=Product::create($data);
+  return redirect('/admin/produkty/'.$product->slug)->with('success','Produkt dodany.');
+ }
+ private function productData(Request $r, ?Product $product=null): array {
+  $data=$r->validate([
+   'name'=>'required|string|max:150','color'=>[$product?'sometimes':'required',Rule::in(['niebieski','szary'])],
+   'price_gross'=>'required|numeric|min:0|max:999999.99','description'=>'required|string|max:12000',
+   'image'=>($product?'nullable':'required').'|image|mimes:jpg,jpeg,png,webp|max:8192',
+   'remove_gallery'=>'nullable|array','remove_gallery.*'=>'string|max:300',
+   'gallery'=>'nullable|array|max:8','gallery.*'=>'image|mimes:jpg,jpeg,png,webp|max:8192',
+   'specifications'=>'nullable|array:height,width,depth,weight,capacity,material',
+   'specifications.*'=>'nullable|string|max:200','equipment'=>'nullable|string|max:3000',
+  ]);
+  unset($data['image'],$data['gallery'],$data['remove_gallery']);
+  $data['active']=$r->boolean('active');
+  $data['specifications']=array_filter($data['specifications'] ?? ($product?->specifications ?? []),fn($value)=>$value!==null && $value!=='');
+  return $data;
+ }
  public function edit(Product $product) {return view('admin.product',compact('product'));}
  public function update(Request $r,Product $product) {
-  $data=$r->validate(['name'=>'required|string|max:150','price_gross'=>'required|numeric|min:0|max:999999.99','description'=>'required|string|max:12000','image'=>'nullable|image|mimes:jpg,jpeg,png,webp|max:8192','remove_gallery'=>'nullable|array','remove_gallery.*'=>'string|max:300','gallery'=>'nullable|array|max:8','gallery.*'=>'image|mimes:jpg,jpeg,png,webp|max:8192']);
-  unset($data['image'],$data['gallery'],$data['remove_gallery']);$data['active']=$r->boolean('active');
+  $data=$this->productData($r,$product);
   $gallery=$product->gallery ?? [];
   $remove=$r->input('remove_gallery',[]);
   if(is_array($remove)) $gallery=array_values(array_diff($gallery,$remove));

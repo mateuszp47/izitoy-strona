@@ -14,6 +14,8 @@ Route::middleware('guest')->group(function(){
 Route::middleware(['auth','admin'])->prefix('admin')->group(function(){
  Route::get('/',[AdminController::class,'index'])->name('admin');
  Route::post('/logout',[AdminController::class,'logout']);
+ Route::get('/produkty/nowy',[AdminController::class,'create']);
+ Route::post('/produkty',[AdminController::class,'store']);
  Route::get('/produkty/{product}',[AdminController::class,'edit']);
  Route::put('/produkty/{product}',[AdminController::class,'update']);
  Route::patch('/zapytania/{inquiry}',[AdminController::class,'inquiry']);
