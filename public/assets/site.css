@@ -6,3 +6,7 @@
 /* White studio backgrounds for the refreshed gray cabin photographs. */
 .hero-photo,.product-photo.is-gray,.detail-image.is-gray,.quality-photo.is-gray,.gallery.is-gray button{background:#fff}
 .hero-photo img,.product-photo.is-gray>img,.detail-image.is-gray img,.quality-photo.is-gray>img{mix-blend-mode:normal}
+
+/* One white background for product photography, including the blue cabin. */
+.product-photo,.detail-image,.gallery button{background:#fff}
+.product-photo>img,.detail-image img{mix-blend-mode:normal}

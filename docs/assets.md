@@ -24,3 +24,7 @@ Narzędzie: wbudowane imagegen, następnie optymalizacja WebP (maksymalnie 1600 
 - `toalety.webp`: wspólne zdjęcie obu kolorów na białym tle.
 
 Polecenia retuszu: zmiana tła na czystą biel #FFFFFF, subtelny cień kontaktowy, zachowanie kąta zdjęcia, koloru, konstrukcji, drzwi, okuć i wyposażenia kabiny; usunięcie tła placu oraz tymczasowych opakowań i zabrudzeń. Dla wnętrza: neutralny balans bieli, bez usuwania ścian ani wyposażenia. Dla zdjęcia wspólnego: zmiana wyłącznie tła i zachowanie obu kabin. Retusz nie dodaje nowych wariantów produktu.
+
+## Obróbka z 20 listopada 2026
+
+Plik `public/assets/toaleta-niebieski.webp`: wbudowane imagegen, zastąpienie niejednolitego tła czystą bielą #FFFFFF; zachowanie koloru, konstrukcji i wyposażenia niebieskiej kabiny, subtelny cień kontaktowy. Następnie konwersja do WebP. Tło ramek katalogu i karty produktu ustawiono na białe.
