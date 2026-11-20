@@ -1,0 +1,15 @@
+.description-field{min-width:0}
+.description-field>label{font-size:12px;font-weight:600;display:block;margin-bottom:7px}
+.rich-editor-shell{background:white;border:1px solid #cdd6d1;border-radius:8px;overflow:hidden}
+.rich-editor-shell:focus-within{outline:2px solid #138480;outline-offset:2px}
+.rich-editor-shell trix-toolbar{display:block;padding:12px 12px 0;background:#f3f6ef;border-bottom:1px solid #dce2df}
+.rich-editor-shell trix-toolbar .trix-button-row{flex-wrap:wrap;gap:5px}
+.rich-editor-shell trix-toolbar .trix-button-group{margin:0 5px 8px 0;border-color:#cdd6d1;background:white}
+.rich-editor-shell trix-toolbar .trix-button{min-width:38px;min-height:38px;border-color:#dce2df}
+.rich-editor-shell trix-toolbar .trix-button.trix-active{background:#d9fa62}
+.rich-editor-shell trix-toolbar [data-trix-button-group="file-tools"]{display:none}
+.rich-editor-shell trix-editor{border:0;border-radius:0;min-height:280px;max-height:650px;overflow-y:auto;padding:18px;font-size:15px;font-weight:400;line-height:1.75;background:#fff;outline:none}
+.rich-editor-shell trix-editor h2{font-size:24px;margin:14px 0;letter-spacing:-.02em}
+.rich-editor-shell trix-editor:empty:not(:focus)::before{content:'Napisz opis produktu…';color:#798781}
+.description-field .form-note{text-align:left;font-weight:400;line-height:1.7;font-size:11px}
+@media(max-width:760px){.rich-editor-shell trix-toolbar{padding:8px 8px 0}.rich-editor-shell trix-toolbar .trix-button{min-width:44px;min-height:44px}.rich-editor-shell trix-editor{padding:14px;min-height:240px}.rich-editor-shell trix-toolbar .trix-dialog{left:8px;right:8px;max-width:calc(100% - 16px)}}

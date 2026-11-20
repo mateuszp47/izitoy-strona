@@ -4,7 +4,8 @@ use App\Models\{Product,Inquiry,Setting};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\{Auth,Storage};
 use Illuminate\Support\Str;
-use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
+use App\Support\ProductDescription;
 class AdminController {
  public function login(Request $r) {
   $data=$r->validate(['email'=>'required|email','password'=>'required|string']);
@@ -29,14 +30,19 @@ class AdminController {
  }
  private function productData(Request $r, ?Product $product=null): array {
   $data=$r->validate([
-   'name'=>'required|string|max:150','color'=>[$product?'sometimes':'required',Rule::in(['niebieski','szary'])],
-   'price_gross'=>'required|numeric|min:0|max:999999.99','description'=>'required|string|max:12000',
+   'name'=>'required|string|max:150','color'=>[$product?'sometimes':'required','required','string','max:60'],
+   'price_gross'=>'required|numeric|min:0|max:999999.99','description'=>'required|string|max:50000',
    'image'=>($product?'nullable':'required').'|image|mimes:jpg,jpeg,png,webp|max:8192',
    'remove_gallery'=>'nullable|array','remove_gallery.*'=>'string|max:300',
    'gallery'=>'nullable|array|max:8','gallery.*'=>'image|mimes:jpg,jpeg,png,webp|max:8192',
    'specifications'=>'nullable|array:height,width,depth,weight,capacity,material',
    'specifications.*'=>'nullable|string|max:200','equipment'=>'nullable|string|max:3000',
   ]);
+  if (isset($data['color'])) $data['color'] = mb_strtolower(trim($data['color']));
+  if (isset($data['color']) && $data['color'] === '') throw ValidationException::withMessages(['color'=>'Podaj nazwę koloru.']);
+  $description = app(ProductDescription::class);
+  $data['description'] = $description->sanitize($data['description']);
+  if ($description->plainText($data['description']) === '') throw ValidationException::withMessages(['description'=>'Wpisz opis produktu.']);
   unset($data['image'],$data['gallery'],$data['remove_gallery']);
   $data['active']=$r->boolean('active');
   $data['specifications']=array_filter($data['specifications'] ?? ($product?->specifications ?? []),fn($value)=>$value!==null && $value!=='');

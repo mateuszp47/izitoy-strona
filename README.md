@@ -1,6 +1,6 @@
 # IZITOY — toalety przenośne
 
-Strona sprzedażowa izitoy.pl: Laravel 13, Blade, SQLite, własny responsywny CSS/JS. Dwa początkowe warianty kabiny: niebieski i szary. Panel pozwala dodawać kolejne modele w tych kolorach. Sprzedaż przez zapytanie; bez koszyka, płatności internetowych i automatycznego zawierania umowy.
+Strona sprzedażowa izitoy.pl: Laravel 13, Blade, SQLite, własny responsywny CSS/JS. Dwa początkowe warianty kabiny: niebieski i szary. Panel pozwala dodawać kolejne modele i własne nazwy kolorów. Sprzedaż przez zapytanie; bez koszyka, płatności internetowych i automatycznego zawierania umowy.
 
 ## Uruchomienie lokalne
 
@@ -22,7 +22,7 @@ Jeśli masz już lokalną kopię: `git pull origin main`, następnie `composer i
 
 - Dodawanie produktów: nazwa, kolor, cena brutto, opis, zdjęcie główne, galeria, własne parametry i wyposażenie. Wiele produktów może mieć ten sam kolor.
 - Edycja istniejących produktów.
-- Ukrywanie/publikowanie produktu; do wyboru pozostają kolory niebieski i szary.
+- Ukrywanie/publikowanie produktu; wybór koloru z podpowiedzi lub wpisanie własnej nazwy (do 60 znaków).
 - Zdjęcie główne oraz galeria do 8 zdjęć. JPG, PNG i WebP, do 8 MB na plik. Zdjęcia z panelu zapisują się w `storage/app/public/products`.
 - Zapytania: dane klienta, wariant, liczba sztuk, miejscowość, treść i data potwierdzenia informacji o prywatności.
 - Statusy: nowe, w obsłudze, zamknięte. Możliwość trwałego usunięcia danych zapytania.
@@ -90,3 +90,21 @@ Po pobraniu zmian uruchom `php artisan migrate` oraz `php artisan optimize:clear
 Migracje znoszą unikalność koloru, dodają parametry produktu i podmieniają wyłącznie fabryczne odwołania do zdjęć szarej kabiny. Zdjęcia przesłane przez administratora pozostają bez zmian. Link do panelu został usunięty z publicznej stopki; panel nadal jest dostępny pod /admin.
 
 Polityka prywatności została rozbudowana dla formularza i panelu. Dane identyfikacyjne administratora pobiera z ustawień firmy. Przed publicznym startem właściciel musi potwierdzić nazwę, adres i kontakt oraz zasady hostingu/poczty, retencję logów i kopii oraz ewentualne transfery poza EOG. Tych informacji nie można ustalić z samego kodu.
+
+## Edytor opisów i dowolne kolory
+
+Opis produktu edytujesz wizualnie: pogrubienie, kursywa, nagłówki, akapity, listy punktowane i numerowane, cytaty i linki. Formatowanie jest zapisywane z produktem i od razu widoczne publicznie, bez przebudowy strony. Dotychczasowe opisy zwykłym tekstem są nadal obsługiwane. Podsumowania SEO i dane strukturalne używają opisu bez znaczników HTML.
+
+Pole koloru pozwala wybrać podpowiedź lub wpisać dowolną nazwę, także np. „ciemny zielony / RAL 6005”. Dla znanych kolorów wyświetlana jest dopasowana kropka; pozostałe mają neutralne oznaczenie i pełną nazwę. Teksty strony nie ograniczają oferty do dwóch kolorów.
+
+Edytor: Trix 2.1.19 (MIT), pliki lokalne w `public/assets/vendor/trix`, bez CDN i bez klucza API. Przesyłanie zdjęć pozostaje w polach galerii. HTML opisu jest czyszczony po stronie serwera przez Symfony HTML Sanitizer, również przy wyświetlaniu starszych wpisów. Dozwolone są elementy formatowania tekstu i bezpieczne linki; skrypty, osadzenia i zdarzenia HTML są usuwane.
+
+Aktualizacja istniejącej kopii:
+
+```bash
+git pull origin main
+composer install
+php artisan optimize:clear
+```
+
+Nie ma nowych migracji dla edytora i nazw kolorów. Przy okazji instalacji sanitizera zaktualizowano cztery istniejące zależności w ramach obecnych wersji głównych do wersji z poprawkami bezpieczeństwa.

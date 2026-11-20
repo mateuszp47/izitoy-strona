@@ -72,7 +72,7 @@ class WebsiteTest extends TestCase {
  }
  public function test_creating_product_requires_admin_and_valid_data(): void {
   $this->post('/admin/produkty',[])->assertRedirect('/admin/login');
-  $this->actingAs($this->admin())->post('/admin/produkty',['name'=>'Błędny','color'=>'zielony','price_gross'=>-1])->assertSessionHasErrors(['color','price_gross','description','image']);
+  $this->actingAs($this->admin())->post('/admin/produkty',['name'=>'Błędny','color'=>['nieprawidłowy'],'price_gross'=>-1])->assertSessionHasErrors(['color','price_gross','description','image']);
   $this->assertDatabaseCount('products',2);
  }
  public function test_privacy_uses_seller_details_from_settings(): void {
